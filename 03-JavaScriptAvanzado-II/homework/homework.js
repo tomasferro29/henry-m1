@@ -3,10 +3,25 @@
 // Closures
 
 function counter() {
+  let j = 0
+  return function a() {
+    j++
+    return j
+  }
+}
+
+let miContador = counter()
+
+// console.log(miContador())
+// console.log(miContador())
+// console.log(miContador())
+// console.log(miContador())
+
   /*
   Ejercicio 1
 
-  La función counter debe retornar otra función. Esta función retornada debe actuar como un contador, retornando un valor numérico que empieza en 1 e incrementa con cada invocación.
+  La función counter debe retornar otra función. Esta función retornada debe actuar como un contador,
+  retornando un valor numérico que empieza en 1 e incrementa con cada invocación.
 
   Ejemplo:
   const nuevoContador = counter()
@@ -19,9 +34,48 @@ function counter() {
   otroContador()      // 2
   otroContador()      // 3
    */
-}
+
+// EXPLICACION PRELIMINAR CLOSURE:
+
+// function saludar(saludo) {
+//   return function(nombre) {
+//     console.log(saludo + ' ' + nombre)
+//   }
+// }
+
+// let saludarHola = saludar('Hola')
+// let saludarChau = saludar('Chau')
+
+// console.log(saludarHola.toString())
+// console.log(saludarChau.toString())
+
+//            [saludarHola],
+// saludarHola('Toni')
+// saludarHola('Toni')
+
+// GLOBAL {   [saludar (f)],
+//            [saludarChau],   ...   }
+// SE ROMPE GLOBAL X SE CREA CONTEXTO DE SALUDAR
+//                                        L_____> ('Hola') --> [saludarHola]
+// SE ROMPE SALUDAR X SE CREA CONTEXTO DE SALUDARHOLA
+//                                         L__> ('Toni') console.log('Hola' + ' ' + 'Toni')
+
 
 function cacheFunction(cb) {
+  var cache = {}
+  return function(arg) {
+    if(cache.hasOwnProperty(arg)){
+      return cache[arg]
+    } else {
+      cache[arg] = cb(arg)
+      return cache[arg]
+    }
+  }
+}
+
+// const cache = cacheFunction(function(a) { return a })
+// cache(8)
+
   /*
   Ejercicio 2
 
@@ -38,10 +92,10 @@ function cacheFunction(cb) {
   const squareCache = cacheFunction(square)
 
   squareCache(5)    // invocará a square(5), almacenará el resultado y lo retornará
-  squareCache(5)    // no volverá a invocar a square, simplemente buscará en la caché cuál es el resultado de square(5) y lo retornará (tip: si usaste un objeto, podés usar hasOwnProperty) 
+  squareCache(5)    // no volverá a invocar a square, simplemente buscará en la caché cuál es el resultado de square(5) y lo retornará (tip: si usaste un objeto, podés usar hasOwnProperty)
 
   */
-}
+
 
 // Bind
 
@@ -67,22 +121,35 @@ function getNombre() {
   Usando el método bind() guardar, en las dos variables declaradas a continuación, dos funciones que actúen como getNombre pero retornen el nombre del instructor y del alumno, respectivamente.
 */
 
-let getNombreInstructor;
-let getNombreAlumno;
+let getNombreInstructor = getNombre.bind(instructor)
+let getNombreAlumno = getNombre.bind(alumno)
+
+
 
 /*
   Ejercicio 4
-  
-  Sin modificar la función crearCadena, usar bind para guardar, en las tres variables declaradas a continuación, tres funciones que retornen una cadena (string) y el delimitador especificado (asteriscos, guiones, y guiones bajos, respectivamente). Las funciones obtenidas deberían recibir solamente un argumento - la cadena de texto - ya que los otros argumentos habrán sido "bindeados". 
+
+  Sin modificar la función crearCadena, usar bind para guardar, en las tres variables declaradas a continuación, tres funciones que retornen una cadena (string) y el delimitador especificado (asteriscos, guiones, y guiones bajos, respectivamente). Las funciones obtenidas deberían recibir solamente un argumento - la cadena de texto - ya que los otros argumentos habrán sido "bindeados".
 */
 
 function crearCadena(delimitadorIzquierda, delimitadorDerecha, cadena) {
   return delimitadorIzquierda + cadena + delimitadorDerecha;
 }
 
-let textoAsteriscos;
-let textoGuiones;
-let textoUnderscore;
+let textoAsteriscos = function(cadena){
+  let bindeado = crearCadena.bind(this, '*', '*', cadena)
+  return bindeado()
+}
+let textoGuiones = function(cadena){
+  let bindeado = crearCadena.bind(this, '-', '-', cadena)
+  return bindeado()
+}
+let textoUnderscore = function(cadena){
+  let bindeado = crearCadena.bind(this, '_', '_', cadena)
+  return bindeado()
+}
+
+console.log(textoAsteriscos('Hola'))
 
 // No modifiquen nada debajo de esta linea
 // --------------------------------
